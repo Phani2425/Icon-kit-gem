@@ -84,7 +84,8 @@ IconKit works seamlessly with Tailwind:
 
 ```erb
 <%= button_to "Create New", new_record_path, class: "btn btn-primary" do %>
-  <%= icon_tag(:plus, class: "mr-1 inline-block") %> Create New
+  <%= icon_tag(:plus, class: "mr-1 inline-block") %>
+  Create New
 <% end %>
 ```
 
@@ -92,7 +93,6 @@ IconKit works seamlessly with Tailwind:
 
 ```erb
 <%= icon_tag(item.complete? ? :check : :clock, color: item.complete? ? "green" : "orange") %>
-<%= item.status_text %>
 ```
 
 ---
@@ -144,111 +144,6 @@ end
 - **Icons not showing**: Ensure the gem is required properly and helpers are available.
 - **Helper not found**: Check that `IconKit::IconsHelper` is correctly loaded.
 - **Styling issues**: Double-check the `size`, `color`, or `class` options for compatibility with your CSS framework (e.g., Tailwind).
-
----
-
-## 📦 Creating & Publishing the Gem
-
-### 1. Set up the gem structure
-
-```bash
-$ bundle gem icon_kit --test=minitest
-$ cd icon_kit
-```
-
-### 2. Project Structure
-
-```
-icon_kit/
-├── app/helpers/icon_kit/icons_helper.rb
-├── lib/icon_kit/engine.rb
-├── lib/icon_kit/version.rb
-├── lib/icon_kit.rb
-├── MIT-LICENSE
-├── icon_kit.gemspec
-├── Rakefile
-└── README.md
-```
-
-### 3. Core Files
-
-#### `lib/icon_kit/engine.rb`
-
-```ruby
-module IconKit
-  class Engine < ::Rails::Engine
-    isolate_namespace IconKit
-
-    initializer "icon_kit.helpers" do
-      ActiveSupport.on_load(:action_controller) do
-        helper IconKit::IconsHelper
-      end
-    end
-  end
-end
-```
-
-#### `lib/icon_kit.rb`
-
-```ruby
-require "icon_kit/engine"
-require "icon_kit/version"
-
-module IconKit
-  mattr_accessor :default_size, default: "w-5 h-5"
-  mattr_accessor :default_color, default: "currentColor"
-
-  def self.configure
-    yield self if block_given?
-  end
-end
-```
-
-### 4. Gemspec
-
-Update `icon_kit.gemspec` with your gem metadata:
-
-```ruby
-Gem::Specification.new do |spec|
-  spec.name        = "icon_kit"
-  spec.version     = "0.1.3"
-  spec.authors     = ["Your Name"]
-  spec.email       = ["your.email@example.com"]
-  spec.summary     = "A Rails engine for SVG icons"
-  spec.description = "An extensive SVG icon system for Rails applications"
-  spec.homepage    = "https://github.com/yourusername/icon_kit"
-  spec.license     = "MIT"
-  spec.required_ruby_version = ">= 3.0.0"
-
-  spec.files = Dir["{app,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
-  spec.add_dependency "rails", ">= 6.0.0", "< 9.0"
-end
-```
-
-### 5. License
-
-Create a `MIT-LICENSE` file:
-
-```text
-MIT License
-
-Copyright (c) 2023 Your Name
-...
-```
-
-### 6. Build and Publish
-
-```bash
-$ gem build icon_kit.gemspec
-$ gem push icon_kit-0.1.3.gem
-```
-
-For local testing in another app:
-
-```ruby
-# Gemfile
-gem 'icon_kit', path: '/path/to/icon_kit'
-```
 
 ---
 
